@@ -1,13 +1,14 @@
 # coding: utf8
 import pandas as pd
-from os.path import join
+from os.path import join, expanduser
 from os import listdir, remove
 from os.path import exists
 from shutil import rmtree
 from os import makedirs
 from datetime import datetime
 
-base = '~/.ccf/data'
+home = expanduser("~")
+base = join(home, '.ccf/data')
 log_file = join(base, 'test.log')
 
 
