@@ -1,3 +1,4 @@
+#coding: utf8
 from sklearn.ensemble import GradientBoostingRegressor
 from os.path import join
 from Preprocess.Utils import base, delete_dir_and_makedir, merge_result
@@ -8,6 +9,8 @@ from sklearn.feature_extraction import DictVectorizer
 import re
 from os import makedirs
 from os import listdir
+from os.path import exists
+from datetime import datetime
 
 
 class GBDT(object):
@@ -66,7 +69,7 @@ class GBDT(object):
         for item in train_df.itertuples(index=False):
             onehot_code = np.concatenate((province_map[item[0]], market_map[item[1]], type_map[item[2]],
                                           key_map[item[3]])).tolist()
-            date = datetime.datetime.strptime(item[4], '%Y-%m-%d')
+            date = datetime.strptime(item[4], '%Y-%m-%d')
 
             onehot_code = onehot_code + [date.timestamp(), item[5], item[6], item[7]]
             Xtrain.append(onehot_code)
@@ -81,7 +84,7 @@ class GBDT(object):
         for item in predict_df.itertuples(index=False):
             onehot_code = np.concatenate((province_map[item[0]], market_map[item[1]], type_map[item[2]],
                                           key_map[item[3]])).tolist()
-            date = datetime.datetime.strptime(item[4], '%Y-%m-%d')
+            date = datetime.strptime(item[4], '%Y-%m-%d')
             onehot_code.append(date.timestamp())
             Xpredict.append(onehot_code)
 
@@ -100,7 +103,7 @@ class GBDT(object):
 
     def predict(self, train_csv_file, predict_csv_file, res_file):
         Xtrain, ytrain, XPredict, price_values = self.onehot_encode(train_csv_file, predict_csv_file)
-        params = {'n_estimators': 500, 'max_depth': 4, 'min_samples_split': 2,
+        params = {'n_estimators': 500, 'max_depth': 8, 'min_samples_split': 2,
                   'learning_rate': 0.01, 'loss': 'ls'}
         regressor = self.fit(Xtrain, np.ravel(ytrain), params)
         date_range = pd.date_range('20160701', '20160731')
@@ -115,7 +118,10 @@ class GBDT(object):
             averin7 = price_values[-7:].mean()
             features = np.append(feature, [averin1, averin3, averin7]).reshape(1, -1)
             predict_value = regressor.predict(features)[0]
-            ytrain = np.append(ytrain, [predict_value])
+            assert float(predict_value) >= 0.0
+            assert float(predict_value) <= 99999
+            price_values = np.append(price_values, [predict_value])
+            # ytrain = np.append(ytrain, [predict_value])
             values.append(predict_value)
         predict_df['aver'] = values
         predict_df.to_csv(res_file, index=False, header=False,
@@ -125,16 +131,19 @@ class GBDT(object):
         delete_dir_and_makedir(forecast_dir)
         for dir_path in listdir(self.sort_result_dir):
             forecast_dir_path = join(forecast_dir, dir_path)
-            makedirs(forecast_dir_path)
+            if not exists(forecast_dir_path):
+                makedirs(forecast_dir_path)
             for file in listdir(join(self.sort_result_dir, dir_path)):
                 file_name = re.findall(r'[a-zA-Z0-9].*', file)[0]
                 train_csv_file = join(self.feature_dir_path, file_name)  # 训练文件路径
                 predict_csv_file = join(self.sort_result_dir, dir_path, file)  # 需要预测文件路径
                 res_file = join(forecast_dir_path, file)  # 保存结果文件路径
-                print(predict_csv_file)
-                with open(join(base, 'predict.log'), 'a') as f:
-                    f.write(predict_csv_file + '\n')
-                self.predict(train_csv_file, predict_csv_file, res_file)
+                if not exists(res_file):
+                    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    print(predict_csv_file)
+                    with open(join(base, 'predict.log'), 'a') as f:
+                        f.write(str(time) + '\t' + predict_csv_file + '\n')
+                    self.predict(train_csv_file, predict_csv_file, res_file)
 
 
 if __name__ == '__main__':
