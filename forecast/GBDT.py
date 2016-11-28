@@ -1,7 +1,7 @@
-#coding: utf8
+# coding: utf8
 from sklearn.ensemble import GradientBoostingRegressor
 from os.path import join
-from Preprocess.Utils import base, delete_dir_and_makedir, merge_result
+from Preprocess.Utils import base, delete_dir_and_makedir, merge_result, log, log_file
 import numpy as np
 import pandas as pd
 import datetime
@@ -139,10 +139,7 @@ class GBDT(object):
                 predict_csv_file = join(self.sort_result_dir, dir_path, file)  # 需要预测文件路径
                 res_file = join(forecast_dir_path, file)  # 保存结果文件路径
                 if not exists(res_file):
-                    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    print(predict_csv_file)
-                    with open(join(base, 'predict.log'), 'a') as f:
-                        f.write(str(time) + '\t' + predict_csv_file + '\n')
+                    log(log_file, predict_csv_file)
                     self.predict(train_csv_file, predict_csv_file, res_file)
 
 
