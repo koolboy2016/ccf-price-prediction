@@ -1,12 +1,20 @@
-#coding: utf8
+# coding: utf8
 import pandas as pd
 from os.path import join
 from os import listdir, remove
 from os.path import exists
 from shutil import rmtree
 from os import makedirs
+from datetime import datetime
 
 base = '/home/wqlin/Desktop/agri'
+log_file = '/home/wqlin/Desktop/agri/test.log'
+
+
+def log(log_file, log_string):
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_file, 'a') as f:
+        f.write(str(time) + '\t' + log_string + '\n')
 
 
 def delete_dir_and_makedir(dir_path):
