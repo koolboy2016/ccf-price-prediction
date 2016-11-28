@@ -4,7 +4,7 @@ import pandas as pd
 import re
 from os import listdir
 from os.path import join
-from Preprocess.Utils import delete_dir_and_makedir, base, makedir_if_not_exists
+from .Utils import delete_dir_and_makedir, base, makedir_if_not_exists
 
 
 class Spliter(object):

@@ -3,7 +3,7 @@
 进行独热编码预处理类
 """
 from os.path import join
-from Utils import delete_dir_and_makedir, base
+from .Utils import delete_dir_and_makedir, base
 import pandas as pd
 
 

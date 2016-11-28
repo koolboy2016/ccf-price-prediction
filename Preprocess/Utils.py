@@ -7,8 +7,8 @@ from shutil import rmtree
 from os import makedirs
 from datetime import datetime
 
-base = '/home/wqlin/Desktop/agri'
-log_file = '/home/wqlin/Desktop/agri/test.log'
+base = '~/.ccf/data'
+log_file = join(base, 'test.log')
 
 
 def log(log_file, log_string):

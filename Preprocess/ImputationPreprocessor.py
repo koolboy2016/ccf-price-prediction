@@ -1,5 +1,5 @@
 #coding: utf8
-from Preprocess.Utils import delete_dir_and_makedir, base
+from.Utils import delete_dir_and_makedir, base
 from os import listdir, makedirs
 from os.path import join
 import pandas as pd
