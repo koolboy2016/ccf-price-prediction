@@ -139,3 +139,4 @@ ENV/
 README.md
 doc/
 test.py
+data/
