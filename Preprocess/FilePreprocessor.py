@@ -49,3 +49,4 @@ if __name__ == '__main__':
     spliter = Spliter()
     spliter.split(farming_csv_file, sort_dir)
     spliter.split(product_market_csv_file, sort_result_dir, isfarming=False)
+
