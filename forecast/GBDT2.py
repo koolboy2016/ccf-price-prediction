@@ -111,7 +111,7 @@ class GBDT(object):
         params['min_samples_leaf'] = best_params3['min_samples_leaf']
         print('params:')
         print(params)
-        log(log_file, gsearch.best_params_)
+        log(log_file, str(gsearch.best_params_))
         # regressor = GradientBoostingRegressor(**params)
         # regressor.fit(Xtrain, np.ravel(ytrain))
 
@@ -156,3 +156,4 @@ if __name__ == '__main__':
     gbdt = GBDT(featrue_dir, sort_result_dir,
                 sort_dir)
     gbdt.run(forecast_dir)
+    merge_result(forecast_dir, sort_result_dir, 'myfuckgdbt.csv')
