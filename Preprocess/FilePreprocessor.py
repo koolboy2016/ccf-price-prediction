@@ -4,7 +4,7 @@ import pandas as pd
 import re
 from os import listdir
 from os.path import join
-from .Utils import delete_dir_and_makedir, base, makedir_if_not_exists
+from Utils import delete_dir_and_makedir, base, makedir_if_not_exists
 
 
 class Spliter(object):
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     product_market_csv_file = join(base, 'product_market.csv')
     sort_result_dir = join(base, 'sort_result')
     spliter = Spliter()
-    # spliter.split(farming_csv_file, sort_dir)
+    spliter.split(farming_csv_file, sort_dir)
     spliter.split(product_market_csv_file, sort_result_dir, isfarming=False)

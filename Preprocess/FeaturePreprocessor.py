@@ -1,5 +1,5 @@
 # coding: utf8
-from Preprocess.Utils import delete_dir_and_makedir, base
+from Utils import delete_dir_and_makedir, base
 import pandas as pd
 from os import listdir, makedirs
 from os.path import join
@@ -27,7 +27,7 @@ class FeatureExtractor(object):
         :param shitf: 默认偏移1
         :return: 不提取最前面7天的 dataFrame
         """
-        rolling_df = pd.rolling_mean(df, window=window).shift(shift)
+        rolling_df = pd.Series.rolling(df, window=window).shift(shift)
         return rolling_df[90:]
 
     def run(self):
@@ -63,6 +63,7 @@ class FeatureExtractor(object):
                         'averin30': averin30,
                         'averin90': averin90
                     })
+                    print(join(target_dir,file))
                     target_df.to_csv(join(target_dir, file), header=True, index=False,
                                      columns=['province', 'market', 'type', 'key', 'date', 'averin1',
                                               'averin7', 'averin15', 'averin30', 'averin90', 'aver'])
