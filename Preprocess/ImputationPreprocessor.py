@@ -1,8 +1,10 @@
-#coding: utf8
-from.Utils import delete_dir_and_makedir, base
+# coding: utf8
+from Utils import delete_dir_and_makedir, base
 from os import listdir, makedirs
 from os.path import join
 import pandas as pd
+from datetime import datetime
+import re
 
 
 class Imputator(object):
@@ -19,10 +21,20 @@ class Imputator(object):
         src_df = pd.read_csv(src_file, header=0,
                              names=['province', 'market', 'type', 'key', 'min', 'aver', 'max', 'date'])
         src_df['date'] = pd.to_datetime(src_df['date'], format='%Y-%m-%d')
+        start_date = src_df['date'].min()
+        min_date_str = re.findall('\d\d\d\d-\d\d-\d\d', str(src_df['date'].min().date()))[0]
+        offset = pd.Timedelta(days=90)
+        if min_date_str < '2014-01-01':
+            start_date = datetime(2013, 10, 3)  # 考虑到要去前90天均值，在这里n=90,所以提前30天
+        else:
+            start_date = (start_date - offset).date()
+        start_date_str = re.findall('\d\d\d\d-\d\d-\d\d', str(start_date))[0]
+        print(start_date_str)
+        assert start_date_str >= '2013-10-03'
         end_date = src_df['date'].max().date()
-        date_range = pd.date_range('20141125', end_date)
+        date_range = pd.date_range(start_date, end_date)
         target_df = pd.DataFrame({
-            'pronvince': src_df['province'][0],
+            'province': src_df['province'][0],
             'market': src_df['market'][0],
             'type': src_df['type'][0],
             'key': src_df['key'][0],
