@@ -4,9 +4,7 @@ from os.path import join
 from Preprocess.Utils import base, delete_dir_and_makedir, merge_result, log, log_file
 import numpy as np
 import pandas as pd
-from datetime import datetime
-from sklearn.feature_extraction import DictVectorizer
-import re
+import logging
 from os import makedirs, listdir
 from sklearn.model_selection import GridSearchCV
 from os.path import exists
@@ -111,7 +109,7 @@ class GBDT(object):
         params['min_samples_leaf'] = best_params3['min_samples_leaf']
         print('params:')
         print(params)
-        log(log_file, str(gsearch.best_params_))
+        log(log_file, str(params) + '\n')
         # regressor = GradientBoostingRegressor(**params)
         # regressor.fit(Xtrain, np.ravel(ytrain))
 
@@ -155,5 +153,9 @@ if __name__ == '__main__':
     featrue_dir = join(base, 'sortFeature')
     gbdt = GBDT(featrue_dir, sort_result_dir,
                 sort_dir)
-    gbdt.run(forecast_dir)
-    merge_result(forecast_dir, sort_result_dir, 'myfuckgdbt.csv')
+    logging.basicConfig(filename='exception.log', level=logging.DEBUG)
+    try:
+        gbdt.run(forecast_dir)
+        merge_result(forecast_dir, sort_result_dir, 'myfuckgdbt.csv')
+    except:
+        logging.exception("Opps")
