@@ -8,7 +8,7 @@ from os import makedirs
 from datetime import datetime
 
 home = expanduser("~")
-base = join(home, '.ccf/data')
+base = join(home, 'ccf/data')
 log_file = join(base, 'test.log')
 
 
