@@ -23,14 +23,13 @@ class Imputator(object):
         src_df['date'] = pd.to_datetime(src_df['date'], format='%Y-%m-%d')
         start_date = src_df['date'].min()
         min_date_str = re.findall('\d\d\d\d-\d\d-\d\d', str(src_df['date'].min().date()))[0]
-        offset = pd.Timedelta(days=90)
-        if min_date_str < '2014-01-01':
-            start_date = datetime(2013, 10, 3)  # 考虑到要去前90天均值，在这里n=90,所以提前30天
-        else:
-            start_date = (start_date - offset).date()
+        offset = pd.Timedelta(days=60)
+        # if min_date_str < '2014-01-01':
+        #     start_date = datetime(2013, 10, 3)  # 考虑到要去前90天均值，在这里n=90,所以提前30天
+        # else:
+        start_date = (start_date - offset).date()
         start_date_str = re.findall('\d\d\d\d-\d\d-\d\d', str(start_date))[0]
         print(start_date_str)
-        assert start_date_str >= '2013-10-03'
         end_date = src_df['date'].max().date()
         date_range = pd.date_range(start_date, end_date)
         target_df = pd.DataFrame({

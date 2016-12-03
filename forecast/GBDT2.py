@@ -63,7 +63,7 @@ class GBDT(object):
         Xtrain = np.array(Xtrain)
         ytrain = np.array(ytrain)
         param_test1 = [
-            {'n_estimators': [i for i in range(100, 501, 20)], 'learning_rate': [i / 100 for i in range(5, 56, 5)]}]
+            {'n_estimators': [i for i in range(100, 701, 20)], 'learning_rate': [i / 100 for i in range(1, 201, 1)]}]
         params = {'max_depth': 4, 'min_samples_split': 20, 'min_samples_leaf': 5,
                   'loss': 'ls', 'max_features': 'sqrt',
                   'subsample': 0.8,
@@ -83,7 +83,7 @@ class GBDT(object):
         del (params['max_depth'])
         del (params['min_samples_split'])
 
-        param_test2 = [{'max_depth': [i for i in range(2, 7, 1)],
+        param_test2 = [{'max_depth': [i for i in range(1, 7, 1)],
                         'min_samples_split': [i for i in range(10, 121, 10)]}]
         gsearch = GridSearchCV(estimator=GradientBoostingRegressor(**params),
                                param_grid=param_test2)
@@ -122,7 +122,7 @@ class GBDT(object):
             averin7 = price_values[-7:].mean()
             averin15 = price_values[-15:].mean()
             averin30 = price_values[-30:].mean()
-            averin90 = price_values[-90:].mean()
+            averin90 = price_values[-60:].mean()
             date = datetime.strptime(item[-1], '%Y-%m-%d')
             predict_feature = np.array([date.year, date.month, date.day, averin1, averin7, averin15,
                                         averin30, averin90]).reshape(1, -1)
