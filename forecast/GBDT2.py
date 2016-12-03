@@ -6,7 +6,8 @@ import numpy as np
 import pandas as pd
 import logging
 from os import makedirs, listdir
-from sklearn.model_selection import GridSearchCV
+# from sklearn.model_selection import GridSearchCV
+from sklearn.grid_search import GridSearchCV
 from os.path import exists
 from datetime import datetime
 
