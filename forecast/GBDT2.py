@@ -85,8 +85,8 @@ class GBDT(object):
         del (params['max_depth'])
         del (params['min_samples_split'])
 
-        param_test2 = [{'max_depth': [i for i in range(1, 7, 1)],
-                        'min_samples_split': [i for i in range(10, 121, 10)]}]
+        param_test2 = [{'max_depth': [i for i in range(2, 7, 1)],
+                        'min_samples_split': [i for i in range(10, 251, 10)]}]
         gsearch = GridSearchCV(estimator=GradientBoostingRegressor(**params),
                                param_grid=param_test2)
         gsearch.fit(Xtrain, np.ravel(ytrain))
@@ -98,8 +98,8 @@ class GBDT(object):
         params['max_depth'] = best_params2['max_depth']
         params['min_samples_split'] = best_params2['min_samples_split']
 
-        param_test3 = [{'min_samples_split': [i for i in range(10, 151, 10)],
-                        'min_samples_leaf': [i for i in range(10, 101, 10)]}]
+        param_test3 = [{'min_samples_split': [i for i in range(10, 251, 10)],
+                        'min_samples_leaf': [i for i in range(10, 151, 10)]}]
         gsearch = GridSearchCV(estimator=GradientBoostingRegressor(**params),
                                param_grid=param_test3)
         gsearch.fit(Xtrain, np.ravel(ytrain))
