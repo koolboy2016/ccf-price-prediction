@@ -53,10 +53,11 @@ class ForecastPlotter(object):
             makedirs(join(save_fig_dir, dir_path))
             temp_dir = join(self.forecast_dir, dir_path)
             for file in listdir(temp_dir):
+                print(join(self.sort_dir,dir_path,file))
                 self.plot(join(self.sort_dir, dir_path, file),
                           join(temp_dir, file), join(save_fig_dir, dir_path, file.replace('csv', 'png')))
 
 
 if __name__ == '__main__':
-    forecastplotter = ForecastPlotter(join(base, 'sort'), join(base, 'forecast'))
+    forecastplotter = ForecastPlotter(join(base, 'sort'), join(base, 'myforecast'))
     forecastplotter.run(join(base, 'forecastPlot'))
