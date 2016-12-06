@@ -6,7 +6,8 @@ import numpy as np
 import pandas as pd
 import logging
 from os import makedirs, listdir
-from sklearn.model_selection import GridSearchCV
+# from sklearn.model_selection import GridSearchCV
+from sklearn.grid_search import GridSearchCV
 from os.path import exists
 from datetime import datetime
 
@@ -44,7 +45,9 @@ class GBDT(object):
                 res_csv_file):
         sort_df = pd.read_csv(sort_csv_file)
         if sort_df['aver'].std() == 0:  # 如果方差为零，就不使用 GBDT
-            self.predict2file(sort_df['aver'].mean(), res_csv_file)
+            predict_values = sort_df['aver'].mean() * np.ones([1, 31])
+            print(sort_csv_file)
+            self.predict2file(predict_values[0], res_csv_file)
         else:
             self.GBDTpredict(feature_csv_file, sort_result_file, res_csv_file)
 
@@ -62,7 +65,7 @@ class GBDT(object):
         Xtrain = np.array(Xtrain)
         ytrain = np.array(ytrain)
         param_test1 = [
-            {'n_estimators': [i for i in range(100, 701, 20)], 'learning_rate': [i / 100 for i in range(1, 201, 1)]}]
+            {'n_estimators': [i for i in range(100, 701, 50)], 'learning_rate': [i / 100 for i in range(1, 151, 5)]}]
         params = {'max_depth': 4, 'min_samples_split': 20, 'min_samples_leaf': 5,
                   'loss': 'ls', 'max_features': 'sqrt',
                   'subsample': 0.8,
@@ -128,7 +131,8 @@ class GBDT(object):
             price = gsearch.predict(predict_feature)[0]
             predict_price.append(price)
             price_values = np.append(price_values, [price])
-        self.predict2file(np.array(predict_price).mean(), res_csv_file)
+        print(np.array(predict_price).reshape(1, -1))
+        self.predict2file(np.array(predict_price).reshape(1, -1)[0], res_csv_file)
 
     def run(self, forecast_dir):
         delete_dir_and_makedir(forecast_dir)
