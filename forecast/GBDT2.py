@@ -10,6 +10,7 @@ from os import makedirs, listdir
 from sklearn.grid_search import GridSearchCV
 from os.path import exists
 from datetime import datetime
+from sklearn.utils import shuffle
 
 
 class GBDT(object):
@@ -56,6 +57,8 @@ class GBDT(object):
         print('begin GBDT training')
         Xtrain, ytrain = [], []
         train_df = pd.read_csv(train_csv_file)
+        price_values = np.array(train_df['aver'].tolist())
+        train_df=shuffle(train_df)
         for item in train_df.itertuples(index=False):
             date = datetime.strptime(item[4], '%Y-%m-%d')
             feature = [date.year, date.month, date.day, item[5], item[6], item[7], item[8], item[9]]
@@ -65,7 +68,7 @@ class GBDT(object):
         Xtrain = np.array(Xtrain)
         ytrain = np.array(ytrain)
         param_test1 = [
-            {'n_estimators': [i for i in range(100, 701, 50)], 'learning_rate': [i / 100 for i in range(1, 151, 5)]}]
+            {'n_estimators': [i for i in range(20, 701, 100)], 'learning_rate': [i / 100 for i in range(10, 101, 10)]}]
         params = {'max_depth': 4, 'min_samples_split': 20, 'min_samples_leaf': 5,
                   'loss': 'ls', 'max_features': 'sqrt',
                   'subsample': 0.8,
@@ -116,7 +119,7 @@ class GBDT(object):
         # regressor = GradientBoostingRegressor(**params)
         # regressor.fit(Xtrain, np.ravel(ytrain))
 
-        price_values = np.array(train_df['aver'].tolist())
+
         predict_price = []
         predict_df = pd.read_csv(predict_csv_file)
         for item in predict_df.itertuples(index=False):
