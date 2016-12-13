@@ -68,7 +68,7 @@ class GBDT(object):
         Xtrain = np.array(Xtrain)
         ytrain = np.array(ytrain)
         param_test1 = [
-            {'n_estimators': [i for i in range(20, 701, 100)], 'learning_rate': [i / 100 for i in range(10, 101, 10)]}]
+            {'n_estimators': [i for i in range(100, 701, 100)], 'learning_rate': [i / 100 for i in range(10, 101, 10)]}]
         params = {'max_depth': 4, 'min_samples_split': 20, 'min_samples_leaf': 5,
                   'loss': 'ls', 'max_features': 'sqrt',
                   'subsample': 0.8,
